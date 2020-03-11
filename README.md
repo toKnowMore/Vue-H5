@@ -1,4 +1,5 @@
-# vue-h5-template
+# vue-h5-templateh5-template
+
 > 一个h5项目的模板
 
 ## Build Setup

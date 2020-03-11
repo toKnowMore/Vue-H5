@@ -1,0 +1,98 @@
+body {
+  height: 100%;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB,
+    Microsoft YaHei, Arial, sans-serif;
+}
+
+.app-container {
+  background-color: white;
+  align-items: center;
+  flex-direction: column;
+  overflow-y: auto;
+  height: calc(100vh - 80px);
+  padding: 60px 20px 20px;
+  position: relative;
+}
+
+.van-form {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.van-field__error-message {
+  display: none;
+}
+
+.van-button.large {
+  background: rgba(37, 126, 255, 1);
+  box-shadow: 0px 2px 6px 0px rgba(38, 38, 38, 0.5);
+  border-radius: 8px;
+  height: 43px;
+  line-height: 43px;
+}
+
+.van-button.normal {
+  width: 156px;
+  height: 50px;
+  background: rgba(37, 126, 255, 1);
+  box-shadow: 0px 2px 6px 0px rgba(38, 38, 38, 0.5);
+  border-radius: 8px;
+  margin: 30px auto;
+}
+
+.list-item + .list-item {
+  margin-bottom: 20px;
+}
+
+.van-field {
+  .input-button {
+    font-size: 14px;
+    width: 100px;
+    border-radius: 15px;
+  }
+}
+
+.van-uploader {
+  height: 106px;
+  width: 150px;
+  background: rgba(255, 255, 255, 1);
+  border-radius: 21px;
+  border: 2px solid rgba(0, 137, 255, 1);
+  .van-uploader__wrapper, .van-uploader__input-wrapper {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .van-button {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 21px;
+    justify-content: center;
+    font-size: 12px;
+    color: rgba(37, 126, 255, 1);
+    .van-button__icon {
+      margin-top: 13px;
+      color: #0089ff;
+      font-size: 28px;
+    }
+  }
+  img {
+    height: 100%;
+    width: 100%;
+    border-radius: 21px;
+  }
+}
+
+
+.answer_icon {
+  width: 20px;
+  height: 20px;
+}
