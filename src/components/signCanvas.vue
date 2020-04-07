@@ -1,11 +1,10 @@
 <template>
   <div class="sign-canvas">
-    <van-overlay :show="show" @click="show = false">
+    <van-overlay :show="show" @click=" false">
       <div class="wrapper" @click.stop>
         <div ref="canvasHw" class="overlay-content">
           <div class="overlay-title">请签名</div>
           <canvas
-            id="canvas"
             ref="canvas"
             canvas-id="signCanvas"
             @touchstart="touchStart"
@@ -26,6 +25,9 @@
 </template>
 
 <script>
+var canvas = null
+var canvasTxt = null
+var points = []
 export default {
   name: 'SignCanvas',
   props: {
@@ -36,16 +38,11 @@ export default {
   },
   data() {
     return {
-      stageInfo: {},
       client: {},
-      points: [],
-      canvasTxt: null,
       startX: 0,
       startY: 0,
       moveY: 0,
       moveX: 0,
-      endY: 0,
-      endX: 0,
       isDown: false
     }
   },
@@ -54,15 +51,13 @@ export default {
   },
   methods: {
     initCanvas() {
-      const canvas = this.$refs.canvas// 指定canvas
-      canvas.width = window.screen.availWidth
-      canvas.width = 400
-      canvas.height = (canvas.width * 16) / 9
-      this.canvasTxt = canvas.getContext('2d')// 设置2D渲染区域
-      this.canvasTxt.lineWidth = 3 // 设置线的宽度
-      this.canvasTxt.lineCap = 'round'
-      this.canvasTxt.lineJoin = 'round'
-      this.stageInfo = canvas.getBoundingClientRect()
+      canvas = this.$refs.canvas// 指定canvas
+      canvas.width = window.screen.availWidth - 80
+      canvas.height = 300
+      canvasTxt = canvas.getContext('2d')// 设置2D渲染区域
+      canvasTxt.lineWidth = 3 // 设置线的宽度
+      canvasTxt.lineCap = 'round'
+      canvasTxt.lineJoin = 'round'
     },
     // mobile
     touchStart(ev) {
@@ -70,17 +65,17 @@ export default {
       ev.preventDefault()
       if (ev.touches.length === 1) {
         const obj = {
-          x: ev.touches[0].clienX,
-          y: ev.touches[0].clientY
+          x: ev.touches[0].pageX - canvas.offsetLeft,
+          y: ev.touches[0].pageY - canvas.offsetTop
         }
         this.startX = obj.x
         this.startY = obj.y
-        this.canvasTxt.beginPath()
-        this.canvasTxt.moveTo(this.startX, this.startY)
-        this.canvasTxt.lineTo(obj.x, obj.y)
-        this.canvasTxt.stroke()
-        this.canvasTxt.closePath()
-        this.points.push(obj)
+        canvasTxt.beginPath()
+        canvasTxt.moveTo(this.startX, this.startY)
+        canvasTxt.lineTo(obj.x, obj.y)
+        canvasTxt.closePath()
+        canvasTxt.stroke()
+        points.push(obj)
       }
     },
     touchMove(ev) {
@@ -88,19 +83,17 @@ export default {
       ev.preventDefault()
       if (ev.touches.length === 1) {
         const obj = {
-          x: ev.touches[0].clientX - this.stageInfo.left,
-          y: ev.touches[0].clientY - this.stageInfo.top
+          x: ev.touches[0].pageX - canvas.offsetLeft,
+          y: ev.touches[0].pageY - canvas.offsetTop
         }
-        this.moveY = obj.y
-        this.moveX = obj.x
-        this.canvasTxt.beginPath()
-        this.canvasTxt.moveTo(this.startX, this.startY)
-        this.canvasTxt.lineTo(obj.x, obj.y)
-        this.canvasTxt.stroke()
-        this.canvasTxt.closePath()
-        this.startY = obj.y
+        canvasTxt.beginPath()
+        canvasTxt.moveTo(this.startX, this.startY)
+        canvasTxt.lineTo(obj.x, obj.y)
+        canvasTxt.stroke()
+        canvasTxt.closePath()
         this.startX = obj.x
-        this.points.push(obj)
+        this.startY = obj.y
+        points.push(obj)
       }
     },
     touchEnd(ev) {
@@ -108,15 +101,15 @@ export default {
       ev.preventDefault()
       if (ev.touches.length === 1) {
         const obj = {
-          x: ev.touches[0].clientX - this.stageInfo.left,
-          y: ev.touches[0].clientY - this.stageInfo.top
+          x: ev.touches[0].pageX - canvas.offsetLeft,
+          y: ev.touches[0].pageY - canvas.offsetTop
         }
-        this.canvasTxt.beginPath()
-        this.canvasTxt.moveTo(this.startX, this.startY)
-        this.canvasTxt.lineTo(obj.x, obj.y)
-        this.canvasTxt.stroke()
-        this.canvasTxt.closePath()
-        this.points.push(obj)
+        canvasTxt.beginPath()
+        canvasTxt.moveTo(this.startX, this.startY)
+        canvasTxt.lineTo(obj.x, obj.y)
+        canvasTxt.stroke()
+        canvasTxt.closePath()
+        points.push(obj)
       }
     },
     // pc
@@ -125,19 +118,17 @@ export default {
       ev.preventDefault()
       if (ev.touches.length === 1) {
         const obj = {
-          x: ev.offsetX,
-          y: ev.offsetY
+          x: ev.touches[0].pageX - canvas.offsetLeft,
+          y: ev.touches[0].pageY - canvas.offsetTop
         }
         this.startX = obj.x
         this.startY = obj.y
-        this.canvasTxt.beginPath()
-        this.canvasTxt.moveTo(this.startX, this.startY)
-        this.canvasTxt.lineTo(obj.x, obj.y)
-        this.canvasTxt.stroke()
-
-        // this.canvasTxt.strokeRect(20,20,80,100);
-        this.canvasTxt.closePath()
-        this.points.push(obj)
+        canvasTxt.beginPath()
+        canvasTxt.moveTo(this.startX, this.startY)
+        canvasTxt.lineTo(obj.x, obj.y)
+        canvasTxt.stroke()
+        canvasTxt.closePath()
+        points.push(obj)
         this.isDown = true
       }
     },
@@ -146,19 +137,17 @@ export default {
       ev.preventDefault()
       if (this.isDown) {
         const obj = {
-          x: ev.offsetX,
-          y: ev.offsetY
+          x: ev.touches[0].pageX - canvas.offsetLeft,
+          y: ev.touches[0].pageY - canvas.offsetTop
         }
-        this.moveY = obj.y
-        this.moveX = obj.x
-        this.canvasTxt.beginPath()
-        this.canvasTxt.moveTo(this.startX, this.startY)
-        this.canvasTxt.lineTo(obj.x, obj.y)
-        this.canvasTxt.stroke()
-        this.canvasTxt.closePath()
+        canvasTxt.beginPath()
+        canvasTxt.moveTo(this.startX, this.startY)
+        canvasTxt.lineTo(obj.x, obj.y)
+        canvasTxt.stroke()
+        canvasTxt.closePath()
         this.startY = obj.y
         this.startX = obj.x
-        this.points.push(obj)
+        points.push(obj)
       }
     },
     mouseUp(ev) {
@@ -166,16 +155,16 @@ export default {
       ev.preventDefault()
       if (ev.touches.length === 1) {
         const obj = {
-          x: ev.offsetX,
-          y: ev.offsetY
+          x: ev.touches[0].pageX - canvas.offsetLeft,
+          y: ev.touches[0].pageY - canvas.offsetTop
         }
-        this.canvasTxt.beginPath()
-        this.canvasTxt.moveTo(this.startX, this.startY)
-        this.canvasTxt.lineTo(obj.x, obj.y)
-        this.canvasTxt.stroke()
-        this.canvasTxt.closePath()
-        this.points.push(obj)
-        this.points.push({ x: -1, y: -1 })
+        canvasTxt.beginPath()
+        canvasTxt.moveTo(this.startX, this.startY)
+        canvasTxt.lineTo(obj.x, obj.y)
+        canvasTxt.stroke()
+        canvasTxt.closePath()
+        points.push(obj)
+        points.push({ x: -1, y: -1 })
         this.isDown = false
       }
     },
@@ -185,8 +174,8 @@ export default {
     },
     // 重写
     clearCanvas() {
-      this.canvasTxt.clearRect(0, 0, this.$refs.canvas.width, this.$refs.canvas.height)
-      this.points = []
+      canvasTxt.clearRect(0, 0, this.$refs.canvas.width, this.$refs.canvas.height)
+      points = []
       this.$emit('clear')
     },
     // 确定签名
@@ -220,7 +209,7 @@ export default {
   align-items: center;
   justify-content: center;
   height: 100%;
-  padding: 0 20px;
+  padding: 0 40px;
 }
 
 .overlay-content {
@@ -228,10 +217,6 @@ export default {
   background-color: white;
   border-radius: 20px;
   width: 100%;
-  canvas {
-    width: 100%;
-    height: 200px;
-  }
   .overlay-title {
     text-align: center;
     font-size: 16px;

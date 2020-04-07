@@ -6,7 +6,7 @@ export default {
     mine: 'مېنىڭ'
   },
   login: {
-    title: 'ئۆگىنىش كۈچلۈك ئەن',
+    title: 'ئۆگىنىش',
     logIn: 'تىزىملىتىش',
     register: 'تىزىملاش',
     loginFailByToken: 'ئاپتوماتىك تىزىملىتىش مەغلۇپ بولدى',

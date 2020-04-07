@@ -6,7 +6,7 @@ export default {
     mine: '我的'
   },
   login: {
-    title: '学习强安管理系统',
+    title: '管理系统',
     logIn: '登录',
     register: '注册',
     loginFailByToken: '自动登录失败',
