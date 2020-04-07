@@ -1,4 +1,4 @@
-# vue-h5-templateh5-template
+# vue-h5-template
 
 > 一个h5项目的模板
 本项目很多地方参考了@PanJiaChen大神的vue-element-admin，所以如果你用过vue-element-admin的话，就会发现本项目非常简单。
